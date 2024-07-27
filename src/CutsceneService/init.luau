@@ -61,7 +61,7 @@ rootPart = char:WaitForChild("HumanoidRootPart")
 local RunService = game:GetService("RunService")
 local StarterGui = game.StarterGui
 local controls = require(plr.PlayerScripts.PlayerModule):GetControls()
-local easingFunctions = require(script.EasingFunctions)
+local easingFunctions = require(script.Parent.EasingFunctions)
 local camera = workspace.CurrentCamera
 local clock = os.clock
 
