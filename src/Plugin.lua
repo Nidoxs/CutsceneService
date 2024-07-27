@@ -3,25 +3,21 @@ if RunService:IsRunning() then
 	return
 end
 
-local cutsceneSelected:Folder|Model, parts, pathFolder, easingFunctions, module
+local cutsceneSelected: Folder | Model, parts, pathFolder, easingFunctions, module
 local visualizeEnabled = false
 local connections = {}
 local Selection = game:GetService("Selection")
 local theme = settings().Studio.Theme
 
 local toolbar = plugin:CreateToolbar("CutsceneService")
-local menuButton = toolbar:CreateButton("Toggle Menu",
-	"Open or close the menu",
-	"http://www.roblox.com/asset/?id=9242733957")
+local menuButton =
+	toolbar:CreateButton("Toggle Menu", "Open or close the menu", "http://www.roblox.com/asset/?id=9242733957")
 menuButton.ClickableWhenViewportHidden = true
 
-local menu = plugin:CreateDockWidgetPluginGui("CutsceneService",
-	DockWidgetPluginGuiInfo.new(
-		Enum.InitialDockState.Float,
-		false, false,
-		350, 450,
-		300, 300
-	))
+local menu = plugin:CreateDockWidgetPluginGui(
+	"CutsceneService",
+	DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, false, false, 350, 450, 300, 300)
+)
 menu.Title = "CutsceneService Helper"
 
 local background = Instance.new("Frame")
@@ -208,10 +204,12 @@ generateCode.Caption.Text = "Code"
 generateCode.Parent = frame
 
 local function getCF(points, t)
-	local copy = {unpack(points)}
+	local copy = { unpack(points) }
 	repeat
 		for i, v in ipairs(copy) do
-			if i ~= 1 then copy[i-1] = copy[i-1]:Lerp(v, t) end
+			if i ~= 1 then
+				copy[i - 1] = copy[i - 1]:Lerp(v, t)
+			end
 		end
 		if #copy ~= 1 then
 			copy[#copy] = nil
@@ -237,7 +235,7 @@ local function update()
 			table.insert(points, v.CFrame)
 		end
 		for i, v in ipairs(parts) do
-			v.CFrame = getCF(points, i*0.01)
+			v.CFrame = getCF(points, i * 0.01)
 		end
 	end
 end
@@ -247,35 +245,46 @@ local function createConnections()
 		v:Disconnect()
 	end
 	connections = {}
-	table.insert(connections, cutsceneSelected.ChildAdded:Connect(function(child)
-		task.wait()
-		table.insert(connections, child.Changed:Connect(function()
+	table.insert(
+		connections,
+		cutsceneSelected.ChildAdded:Connect(function(child)
+			task.wait()
+			table.insert(
+				connections,
+				child.Changed:Connect(function()
+					update()
+				end)
+			)
 			update()
-		end))
-		update()
-	end))
-	table.insert(connections, cutsceneSelected.ChildRemoved:Connect(function()
-		update()
-	end))
+		end)
+	)
+	table.insert(
+		connections,
+		cutsceneSelected.ChildRemoved:Connect(function()
+			update()
+		end)
+	)
 	--[[table.insert(connections, folder.Destroying:Connect(function()
 	for _, v in ipairs(parts) do
 		v.Position = Vector3.zero
 	end]]
 	for _, v in ipairs(cutsceneSelected:GetChildren()) do
-		table.insert(connections, v.Changed:Connect(function()
-			update()
-		end))
+		table.insert(
+			connections,
+			v.Changed:Connect(function()
+				update()
+			end)
+		)
 	end
 	update()
 end
 
 changeButton.MouseButton1Click:Connect(function()
 	local folder = Selection:Get()
-	if #folder == 1 and (folder[1].ClassName == "Folder"
-		or folder[1].ClassName == "Model") then
+	if #folder == 1 and (folder[1].ClassName == "Folder" or folder[1].ClassName == "Model") then
 		folder = folder[1]
 		cutsceneSelected = folder
-		selection.Text = "Selected: "..folder.Name
+		selection.Text = "Selected: " .. folder.Name
 		if visualizeEnabled then
 			createConnections()
 		end
@@ -297,7 +306,7 @@ createPoint.MouseButton1Click:Connect(function()
 			end
 		end
 		local point = Instance.new("Part")
-		point.Name = tostring(highestNumber+1)
+		point.Name = tostring(highestNumber + 1)
 		point.Anchored = true
 		point.CanCollide = false
 		point.BottomSurface = Enum.SurfaceType.Smooth
@@ -309,7 +318,9 @@ createPoint.MouseButton1Click:Connect(function()
 end)
 
 visualizeCutscene.MouseButton1Click:Connect(function()
-	if not cutsceneSelected then return end
+	if not cutsceneSelected then
+		return
+	end
 	visualizeEnabled = not visualizeEnabled
 	if visualizeEnabled then
 		pathFolder = Instance.new("Folder")
@@ -346,15 +357,19 @@ visualizeCutscene.MouseButton1Click:Connect(function()
 end)
 
 previewCutscene.MouseButton1Click:Connect(function()
-	if not cutsceneSelected then return end
+	if not cutsceneSelected then
+		return
+	end
 	if not easingFunctions then
 		for _, v in ipairs(game:GetDescendants()) do
 			if v.Name == "EasingFunctions" and v.ClassName == "ModuleScript" then
-				easingFunctions = require(v) break
+				easingFunctions = require(v)
+				break
 			end
 		end
 		if not easingFunctions then
-			warn("CutsceneService module was not found in game") return
+			warn("CutsceneService module was not found in game")
+			return
 		end
 	end
 	local duration = tonumber(durationBox.Text) or 5
@@ -364,7 +379,8 @@ previewCutscene.MouseButton1Click:Connect(function()
 	end
 	easingFunction = easingFunctions[easingFunction]
 	if not easingFunction then
-		warn("EasingFunction not found") return
+		warn("EasingFunction not found")
+		return
 	end
 	local instances = cutsceneSelected:GetChildren()
 	local points = {}
@@ -377,7 +393,7 @@ previewCutscene.MouseButton1Click:Connect(function()
 
 	workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
 	local start = os.clock()
-	RunService:BindToRenderStep("Cutscene", Enum.RenderPriority.Camera.Value+1, function()
+	RunService:BindToRenderStep("Cutscene", Enum.RenderPriority.Camera.Value + 1, function()
 		local passedTime = os.clock() - start
 		if passedTime <= duration then
 			workspace.CurrentCamera.CFrame = getCF(points, easingFunction(passedTime, 0, 1, duration))
@@ -389,36 +405,40 @@ previewCutscene.MouseButton1Click:Connect(function()
 end)
 
 generateCode.MouseButton1Click:Connect(function()
-	if not cutsceneSelected then return end
+	if not cutsceneSelected then
+		return
+	end
 	if not module then
 		for _, v in ipairs(game:GetDescendants()) do
 			if v.Name == "CutsceneService" and v.ClassName == "ModuleScript" then
-				module = v break
+				module = v
+				break
 			end
 		end
 		if not module then
-			warn("CutsceneService module was not found in game") return
+			warn("CutsceneService module was not found in game")
+			return
 		end
 	end
 	local duration = tonumber(durationBox.Text) or 5
 	local easingFunction = easingBox.Text
 
 	local source = "local CutsceneService = require("
-	source ..= "game."..module:GetFullName()..")\n\n"
-	source ..= "local "..cutsceneSelected.Name.." = CutsceneService:Create(\n"
+	source ..= "game." .. module:GetFullName() .. ")\n\n"
+	source ..= "local " .. cutsceneSelected.Name .. " = CutsceneService:Create(\n"
 	if cutsceneSelected:IsDescendantOf(workspace) then
-		source ..= "	"..string.gsub(cutsceneSelected:GetFullName(), "^.", string.lower)..",\n"
+		source ..= "	" .. string.gsub(cutsceneSelected:GetFullName(), "^.", string.lower) .. ",\n"
 	else
-		source ..= "	game."..cutsceneSelected:GetFullName()..",\n"
+		source ..= "	game." .. cutsceneSelected:GetFullName() .. ",\n"
 	end
 	if easingFunction == "" or easingFunction == "Linear" then
-		source ..= "	"..duration.."\n)"
+		source ..= "	" .. duration .. "\n)"
 	else
-		source ..= "	"..duration..",\n"
-		source ..= "	\""..easingFunction.."\"\n)"
+		source ..= "	" .. duration .. ",\n"
+		source ..= '	"' .. easingFunction .. '"\n)'
 	end
-	source ..= "\n\n--task.wait(4)\n--"..cutsceneSelected.Name..":Play()\n"
-	
+	source ..= "\n\n--task.wait(4)\n--" .. cutsceneSelected.Name .. ":Play()\n"
+
 	local localScript = Instance.new("LocalScript")
 	localScript.Name = cutsceneSelected.Name
 	localScript.Source = source

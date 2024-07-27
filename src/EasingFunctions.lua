@@ -1,3 +1,5 @@
+--#selene:allow(shadowing)
+
 --[[
 
 Info: developer.roblox.com/en-us/api-reference/enum/EasingStyle
@@ -57,7 +59,7 @@ p = period
 ]]
 
 type n = number
-local s:n = 1.70158
+local s: n = 1.70158
 
 --[[
 fun fact, s can be calculated using this function:
@@ -78,20 +80,20 @@ local sqrt = math.sqrt
 local abs = math.abs
 local asin = math.asin
 
-local function Linear(t:n, _:n, _:n, d:n):n
+local function Linear(t: n, _: n, _: n, d: n): n
 	return t / d
 end
 
-local function InQuad(t:n, b:n, c:n, d:n):n
+local function InQuad(t: n, b: n, c: n, d: n): n
 	return c * pow(t / d, 2) + b
 end
 
-local function OutQuad(t:n, b:n, c:n, d:n):n
+local function OutQuad(t: n, b: n, c: n, d: n): n
 	t /= d
 	return -c * t * (t - 2) + b
 end
 
-local function InOutQuad(t:n, b:n, c:n, d:n):n
+local function InOutQuad(t: n, b: n, c: n, d: n): n
 	t = t / d * 2
 	if t < 1 then
 		return c / 2 * pow(t, 2) + b
@@ -100,7 +102,7 @@ local function InOutQuad(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function OutInQuad(t:n, b:n, c:n, d:n):n
+local function OutInQuad(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutQuad(t * 2, b, c / 2, d)
 	else
@@ -108,15 +110,15 @@ local function OutInQuad(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function InCubic(t:n, b:n, c:n, d:n):n
+local function InCubic(t: n, b: n, c: n, d: n): n
 	return c * pow(t / d, 3) + b
 end
 
-local function OutCubic(t:n, b:n, c:n, d:n):n
+local function OutCubic(t: n, b: n, c: n, d: n): n
 	return c * (pow(t / d - 1, 3) + 1) + b
 end
 
-local function InOutCubic(t:n, b:n, c:n, d:n):n
+local function InOutCubic(t: n, b: n, c: n, d: n): n
 	t = t / d * 2
 	if t < 1 then
 		return c / 2 * t * t * t + b
@@ -126,7 +128,7 @@ local function InOutCubic(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function OutInCubic(t:n, b:n, c:n, d:n):n
+local function OutInCubic(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutCubic(t * 2, b, c / 2, d)
 	else
@@ -134,15 +136,15 @@ local function OutInCubic(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function InQuart(t:n, b:n, c:n, d:n):n
+local function InQuart(t: n, b: n, c: n, d: n): n
 	return c * pow(t / d, 4) + b
 end
 
-local function OutQuart(t:n, b:n, c:n, d:n):n
+local function OutQuart(t: n, b: n, c: n, d: n): n
 	return -c * (pow(t / d - 1, 4) - 1) + b
 end
 
-local function InOutQuart(t:n, b:n, c:n, d:n):n
+local function InOutQuart(t: n, b: n, c: n, d: n): n
 	t = t / d * 2
 	if t < 1 then
 		return c / 2 * pow(t, 4) + b
@@ -152,7 +154,7 @@ local function InOutQuart(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function OutInQuart(t:n, b:n, c:n, d:n):n
+local function OutInQuart(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutQuart(t * 2, b, c / 2, d)
 	else
@@ -160,15 +162,15 @@ local function OutInQuart(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function InQuint(t:n, b:n, c:n, d:n):n
+local function InQuint(t: n, b: n, c: n, d: n): n
 	return c * pow(t / d, 5) + b
 end
 
-local function OutQuint(t:n, b:n, c:n, d:n):n
+local function OutQuint(t: n, b: n, c: n, d: n): n
 	return c * (pow(t / d - 1, 5) + 1) + b
 end
 
-local function InOutQuint(t:n, b:n, c:n, d:n):n
+local function InOutQuint(t: n, b: n, c: n, d: n): n
 	t = t / d * 2
 	if t < 1 then
 		return c / 2 * pow(t, 5) + b
@@ -177,7 +179,7 @@ local function InOutQuint(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function OutInQuint(t:n, b:n, c:n, d:n):n
+local function OutInQuint(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutQuint(t * 2, b, c / 2, d)
 	else
@@ -185,41 +187,49 @@ local function OutInQuint(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function InSine(t:n, b:n, c:n, d:n):n
+local function InSine(t: n, b: n, c: n, d: n): n
 	return -c * cos(t / d * (pi / 2)) + c + b
 end
 
-local function OutSine(t:n, b:n, c:n, d:n):n
+local function OutSine(t: n, b: n, c: n, d: n): n
 	return c * sin(t / d * (pi / 2)) + b
 end
 
-local function InOutSine(t:n, b:n, c:n, d:n):n
+local function InOutSine(t: n, b: n, c: n, d: n): n
 	return -c / 2 * (cos(pi * t / d) - 1) + b
 end
 
-local function OutInSine(t:n, b:n, c:n, d:n):n
+local function OutInSine(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutSine(t * 2, b, c / 2, d)
 	else
-		return InSine((t * 2) -d, b + c / 2, c / 2, d)
+		return InSine((t * 2) - d, b + c / 2, c / 2, d)
 	end
 end
 
-local function InExpo(t:n, b:n, c:n, d:n):n
-	if t == 0 then return b else
+local function InExpo(t: n, b: n, c: n, d: n): n
+	if t == 0 then
+		return b
+	else
 		return c * pow(2, 10 * (t / d - 1)) + b - c * 0.001
 	end
 end
 
-local function OutExpo(t:n, b:n, c:n, d:n):n
-	if t == d then return b + c else
+local function OutExpo(t: n, b: n, c: n, d: n): n
+	if t == d then
+		return b + c
+	else
 		return c * 1.001 * (-pow(2, -10 * t / d) + 1) + b
 	end
 end
 
-local function InOutExpo(t:n, b:n, c:n, d:n):n
-	if t == 0 then return b end
-	if t == d then return b + c end
+local function InOutExpo(t: n, b: n, c: n, d: n): n
+	if t == 0 then
+		return b
+	end
+	if t == d then
+		return b + c
+	end
 	t = t / d * 2
 	if t < 1 then
 		return c / 2 * pow(2, 10 * (t - 1)) + b - c * 0.0005
@@ -229,7 +239,7 @@ local function InOutExpo(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function OutInExpo(t:n, b:n, c:n, d:n):n
+local function OutInExpo(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutExpo(t * 2, b, c / 2, d)
 	else
@@ -237,15 +247,15 @@ local function OutInExpo(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function InCirc(t:n, b:n, c:n, d:n):n
+local function InCirc(t: n, b: n, c: n, d: n): n
 	return -c * (sqrt(1 - pow(t / d, 2)) - 1) + b
 end
 
-local function OutCirc(t:n, b:n, c:n, d:n):n
+local function OutCirc(t: n, b: n, c: n, d: n): n
 	return c * sqrt(1 - pow(t / d - 1, 2)) + b
 end
 
-local function InOutCirc(t:n, b:n, c:n, d:n):n
+local function InOutCirc(t: n, b: n, c: n, d: n): n
 	t = t / d * 2
 	if t < 1 then
 		return -c / 2 * (sqrt(1 - t * t) - 1) + b
@@ -255,7 +265,7 @@ local function InOutCirc(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function OutInCirc(t:n, b:n, c:n, d:n):n
+local function OutInCirc(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutCirc(t * 2, b, c / 2, d)
 	else
@@ -263,44 +273,64 @@ local function OutInCirc(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function InElastic(t:n, b:n, c:n, d:n, a:n, p:n):n
-	if t == 0 then return b end
+local function InElastic(t: n, b: n, c: n, d: n, a: n, p: n): n
+	if t == 0 then
+		return b
+	end
 	t /= d
-	if t == 1 then return b + c end
-	if not p then p = d * 0.3 end
-	local s:n
+	if t == 1 then
+		return b + c
+	end
+	if not p then
+		p = d * 0.3
+	end
+	local s: n
 	if not a or a < abs(c) then
 		a = c
 		s = p / 4
 	else
-		s = p / (2 * pi) * asin(c/a)
+		s = p / (2 * pi) * asin(c / a)
 	end
 	t -= 1
 	return -(a * pow(2, 10 * t) * sin((t * d - s) * (2 * pi) / p)) + b
 end
 
-local function OutElastic(t:n, b:n, c:n, d:n, a:n, p:n):n
-	if t == 0 then return b end
+local function OutElastic(t: n, b: n, c: n, d: n, a: n, p: n): n
+	if t == 0 then
+		return b
+	end
 	t /= d
-	if t == 1 then return b + c end
-	if not p then p = d * 0.3 end
-	local s:n
+	if t == 1 then
+		return b + c
+	end
+	if not p then
+		p = d * 0.3
+	end
+	local s: n
 	if not a or a < abs(c) then
 		a = c
 		s = p / 4
 	else
-		s = p / (2 * pi) * asin(c/a)
+		s = p / (2 * pi) * asin(c / a)
 	end
 	return a * pow(2, -10 * t) * sin((t * d - s) * (2 * pi) / p) + c + b
 end
 
-local function InOutElastic(t:n, b:n, c:n, d:n, a:n, p:n):n
-	if t == 0 then return b end
+local function InOutElastic(t: n, b: n, c: n, d: n, a: n, p: n): n
+	if t == 0 then
+		return b
+	end
 	t = t / d * 2
-	if t == 2 then return b + c end
-	if not p then p = d * (0.3 * 1.5) end
-	if not a then a = 0 end
-	local s:n
+	if t == 2 then
+		return b + c
+	end
+	if not p then
+		p = d * (0.3 * 1.5)
+	end
+	if not a then
+		a = 0
+	end
+	local s: n
 	if not a or a < abs(c) then
 		a = c
 		s = p / 4
@@ -312,11 +342,11 @@ local function InOutElastic(t:n, b:n, c:n, d:n, a:n, p:n):n
 		return -0.5 * (a * pow(2, 10 * t) * sin((t * d - s) * (2 * pi) / p)) + b
 	else
 		t -= 1
-		return a * pow(2, -10 * t) * sin((t * d - s) * (2 * pi) / p ) * 0.5 + c + b
+		return a * pow(2, -10 * t) * sin((t * d - s) * (2 * pi) / p) * 0.5 + c + b
 	end
 end
 
-local function OutInElastic(t:n, b:n, c:n, d:n, a:n, p:n):n
+local function OutInElastic(t: n, b: n, c: n, d: n, a: n, p: n): n
 	if t < d / 2 then
 		return OutElastic(t * 2, b, c / 2, d, a, p)
 	else
@@ -324,17 +354,17 @@ local function OutInElastic(t:n, b:n, c:n, d:n, a:n, p:n):n
 	end
 end
 
-local function InBack(t:n, b:n, c:n, d:n):n
+local function InBack(t: n, b: n, c: n, d: n): n
 	t /= d
 	return c * t * t * ((s + 1) * t - s) + b
 end
 
-local function OutBack(t:n, b:n, c:n, d:n):n
+local function OutBack(t: n, b: n, c: n, d: n): n
 	t = t / d - 1
 	return c * (t * t * ((s + 1) * t + s) + 1) + b
 end
 
-local function InOutBack(t:n, b:n, c:n, d:n):n
+local function InOutBack(t: n, b: n, c: n, d: n): n
 	t = t / d * 2
 	if t < 1 then
 		return c / 2 * (t * t * ((s + 1) * t - s)) + b
@@ -344,7 +374,7 @@ local function InOutBack(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function OutInBack(t:n, b:n, c:n, d:n):n
+local function OutInBack(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutBack(t * 2, b, c / 2, d)
 	else
@@ -352,7 +382,7 @@ local function OutInBack(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function OutBounce(t:n, b:n, c:n, d:n):n
+local function OutBounce(t: n, b: n, c: n, d: n): n
 	t /= d
 	if t < 0.36363636363636 then
 		return c * (7.5625 * t * t) + b
@@ -368,19 +398,19 @@ local function OutBounce(t:n, b:n, c:n, d:n):n
 	end
 end
 
-local function InBounce(t:n, b:n, c:n, d:n):n
+local function InBounce(t: n, b: n, c: n, d: n): n
 	return c - OutBounce(d - t, 0, c, d) + b
 end
 
-local function InOutBounce(t:n, b:n, c:n, d:n):n
+local function InOutBounce(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return InBounce(t * 2, 0, c, d) * 0.5 + b
 	else
-		return OutBounce(t * 2 - d, 0, c, d) * 0.5 + c * .5 + b
+		return OutBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b
 	end
 end
 
-local function OutInBounce(t:n, b:n, c:n, d:n):n
+local function OutInBounce(t: n, b: n, c: n, d: n): n
 	if t < d / 2 then
 		return OutBounce(t * 2, b, c / 2, d)
 	else
@@ -394,7 +424,7 @@ return {
 	OutQuad = OutQuad,
 	InOutQuad = InOutQuad,
 	OutInQuad = OutInQuad,
-	InCubic  = InCubic ,
+	InCubic = InCubic,
 	OutCubic = OutCubic,
 	InOutCubic = InOutCubic,
 	OutInCubic = OutInCubic,

@@ -32,7 +32,7 @@ SOFTWARE.
 
 local module = {}
 module.Settings = {
-	YieldPauseArgument = false
+	YieldPauseArgument = false,
 }
 
 -------------------------------------------------
@@ -117,12 +117,12 @@ do
 	local Connection = {}
 	Connection.__index = Connection
 
-	function Connection.new(signal, fn):RBXScriptConnection
+	function Connection.new(signal, fn): RBXScriptConnection
 		return setmetatable({
 			Connected = true,
 			_signal = signal,
 			_fn = fn,
-			_next = false
+			_next = false,
 		}, Connection)
 	end
 
@@ -142,8 +142,8 @@ do
 		end
 	end
 
-	function Signal.new():RBXScriptSignal
-		return setmetatable({_handlerListHead = false}, Signal)
+	function Signal.new(): RBXScriptSignal
+		return setmetatable({ _handlerListHead = false }, Signal)
 	end
 
 	function Signal:Connect(fn)
@@ -176,7 +176,7 @@ do
 
 	function Signal:Wait()
 		local waitingCoroutine = coroutine.running()
-		local cn;
+		local cn
 		cn = self:Connect(function(...)
 			cn:Disconnect()
 			task.spawn(waitingCoroutine, ...)
@@ -186,8 +186,8 @@ do
 end
 
 --de Casteljau's algorithm
-local function getCF(points:{[number]:CFrame}, t:number):CFrame
-	local copy = {unpack(points)}
+local function getCF(points: { [number]: CFrame }, t: number): CFrame
+	local copy = { unpack(points) }
 	local n = #copy
 	for j = 1, n - 1 do
 		for k = 1, n - j do
@@ -203,7 +203,7 @@ local function getCoreGuisEnabled()
 		Chat = StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat),
 		EmotesMenu = StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.EmotesMenu),
 		Health = StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Health),
-		PlayerList = StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.PlayerList)
+		PlayerList = StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.PlayerList),
 	}
 end
 
@@ -217,60 +217,88 @@ module.Enum = {
 
 local specialFunctions = {
 	Start = {
-		{"CustomCamera", function(self, customCamera)
-			assert(customCamera, "CustomCamera Argument 1 missing or nil")
-			camera = customCamera
-			self.CustomCamera = customCamera
-		end},
-		{"DisableControls", function()
-			controls:Disable()
-		end},
-		{"FreezeCharacter", function(_, stopAnimations)
-			if stopAnimations ~= false then
-				for _, v in ipairs(char.Humanoid.Animator:GetPlayingAnimationTracks()) do
-					v:Stop()
+		{
+			"CustomCamera",
+			function(self, customCamera)
+				assert(customCamera, "CustomCamera Argument 1 missing or nil")
+				camera = customCamera
+				self.CustomCamera = customCamera
+			end,
+		},
+		{
+			"DisableControls",
+			function()
+				controls:Disable()
+			end,
+		},
+		{
+			"FreezeCharacter",
+			function(_, stopAnimations)
+				if stopAnimations ~= false then
+					for _, v in ipairs(char.Humanoid.Animator:GetPlayingAnimationTracks()) do
+						v:Stop()
+					end
 				end
-			end
-			rootPart.Anchored = true
-		end},
-		{"CurrentCameraPoint", function(self, position)
-			table.insert(self.PointsCopy, position or #self.PointsCopy+1, camera.CFrame)
-		end},
-		{"DefaultCameraPoint", function(self, position, useCurrentZoomDistance)
-			local zoomDistance = 12.5
-			if useCurrentZoomDistance == false then
-				--pls help me: devforum.roblox.com/t/1209043
-				--set camera zoomDistance to default for smooth transition when changing type to custom
-				--zoomController.SetZoomParameters(zoomDistance, 0) isn't good
-				local oldMin = plr.CameraMinZoomDistance
-				local oldMax = plr.CameraMaxZoomDistance
-				plr.CameraMinZoomDistance = zoomDistance
-				plr.CameraMaxZoomDistance = zoomDistance
-				task.wait()
-				plr.CameraMinZoomDistance = oldMin
-				plr.CameraMaxZoomDistance = oldMax
-			else
-				zoomDistance = (camera.CFrame.Position - camera.Focus.Position).Magnitude
-				--this is only the zoomDistance when there are no parts in the cameras way
-			end
-			local lookAt = rootPart.CFrame.Position + Vector3.new(0, rootPart.Size.Y/2 + 0.5, 0)
-			local at = (rootPart.CFrame * CFrame.new(0, zoomDistance/2.6397830596715992, zoomDistance/1.0352760971197642)).Position
+				rootPart.Anchored = true
+			end,
+		},
+		{
+			"CurrentCameraPoint",
+			function(self, position)
+				table.insert(self.PointsCopy, position or #self.PointsCopy + 1, camera.CFrame)
+			end,
+		},
+		{
+			"DefaultCameraPoint",
+			function(self, position, useCurrentZoomDistance)
+				local zoomDistance = 12.5
+				if useCurrentZoomDistance == false then
+					--pls help me: devforum.roblox.com/t/1209043
+					--set camera zoomDistance to default for smooth transition when changing type to custom
+					--zoomController.SetZoomParameters(zoomDistance, 0) isn't good
+					local oldMin = plr.CameraMinZoomDistance
+					local oldMax = plr.CameraMaxZoomDistance
+					plr.CameraMinZoomDistance = zoomDistance
+					plr.CameraMaxZoomDistance = zoomDistance
+					task.wait()
+					plr.CameraMinZoomDistance = oldMin
+					plr.CameraMaxZoomDistance = oldMax
+				else
+					zoomDistance = (camera.CFrame.Position - camera.Focus.Position).Magnitude
+					--this is only the zoomDistance when there are no parts in the cameras way
+				end
+				local lookAt = rootPart.CFrame.Position + Vector3.new(0, rootPart.Size.Y / 2 + 0.5, 0)
+				local at = (rootPart.CFrame * CFrame.new(
+					0,
+					zoomDistance / 2.6397830596715992,
+					zoomDistance / 1.0352760971197642
+				)).Position
 
-			table.insert(self.PointsCopy, position or #self.PointsCopy+1, CFrame.lookAt(at, lookAt))
-		end}
+				table.insert(self.PointsCopy, position or #self.PointsCopy + 1, CFrame.lookAt(at, lookAt))
+			end,
+		},
 	},
 	End = {
-		{"DisableControls", function()
-			controls:Enable(true)
-		end},
-		{"FreezeCharacter", function()
-			rootPart.Anchored = false
-		end},
-		{"CustomCamera", function(self)
-			camera.CameraType = self.PreviousCameraType
-			camera = workspace.CurrentCamera
-		end}
-	}
+		{
+			"DisableControls",
+			function()
+				controls:Enable(true)
+			end,
+		},
+		{
+			"FreezeCharacter",
+			function()
+				rootPart.Anchored = false
+			end,
+		},
+		{
+			"CustomCamera",
+			function(self)
+				camera.CameraType = self.PreviousCameraType
+				camera = workspace.CurrentCamera
+			end,
+		},
+	},
 }
 
 --configure specialFunctions table
@@ -289,18 +317,13 @@ local cutscene = {}
 cutscene.__index = cutscene
 cutscene.ClassName = "Cutscene"
 
-function cutscene:Play():()
-	if
-		module.Playing == nil
-		or module.Playing.CurrentCutscene == self
-		or module.Playing.Next == self
-	then
-
+function cutscene:Play(): ()
+	if module.Playing == nil or module.Playing.CurrentCutscene == self or module.Playing.Next == self then
 		if not module.Playing or not module.Playing.CurrentCutscene then
 			module.Playing = self
 		end
 
-		self.PointsCopy = {unpack(self.Points)}
+		self.PointsCopy = { unpack(self.Points) }
 		local pointsCopy = self.PointsCopy
 		local easingFunction = easingFunctions[self.EasingFunction]
 		local duration = self.Duration
@@ -327,7 +350,7 @@ function cutscene:Play():()
 		self.PlaybackState = Enum.PlaybackState.Playing
 		local start = clock()
 
-		RunService:BindToRenderStep("Cutscene", Enum.RenderPriority.Camera.Value+1, function()
+		RunService:BindToRenderStep("Cutscene", Enum.RenderPriority.Camera.Value + 1, function()
 			passedTime = clock() - start
 
 			if passedTime <= duration then
@@ -392,7 +415,7 @@ function cutscene:Play():()
 	end
 end
 
-function cutscene:Pause(waitTime:number?):()
+function cutscene:Pause(waitTime: number?): ()
 	if module.Playing then
 		if self.PassedTime == nil then
 			error("Error while calling Pause - Cutscene hasn't started yet")
@@ -433,10 +456,9 @@ function cutscene:Pause(waitTime:number?):()
 	end
 end
 
-function cutscene:Resume():()
+function cutscene:Resume(): ()
 	if module.Playing == nil or module.Playing.CurrentCutscene == self then
 		if self.PassedTime and self.PassedTime ~= 0 then
-
 			module.Playing = module.Playing or self
 			local duration = self.Duration
 			local pointsCopy = self.PointsCopy
@@ -450,7 +472,7 @@ function cutscene:Resume():()
 			camera.CameraType = Enum.CameraType.Scriptable
 			local start = clock() - passedTime
 
-			RunService:BindToRenderStep("Cutscene", Enum.RenderPriority.Camera.Value+1, function()
+			RunService:BindToRenderStep("Cutscene", Enum.RenderPriority.Camera.Value + 1, function()
 				passedTime = clock() - start
 
 				if passedTime <= duration then
@@ -518,13 +540,13 @@ function cutscene:Resume():()
 	end
 end
 
-function cutscene:Cancel():()
+function cutscene:Cancel(): ()
 	if module.Playing then
 		RunService:UnbindFromRenderStep("Cutscene")
 		module.Playing = nil
 
 		for _, v in ipairs(self.SpecialFunctions[2]) do
-			if type(v) == "table" then			
+			if type(v) == "table" then
 				specialFunctions.End[v[1]](self, select(2, unpack(v)))
 			else
 				specialFunctions.End[v](self)
@@ -549,12 +571,12 @@ function cutscene:Cancel():()
 	end
 end
 
-function cutscene:Destroy():()
+function cutscene:Destroy(): ()
 	table.clear(self)
 	setmetatable(self, nil)
 end
 
-function module:Create(points:Instance|{[number]:CFrame}, duration:number, ...)
+function module:Create(points: Instance | { [number]: CFrame }, duration: number, ...)
 	assert(points, "Argument 1 (points) missing or nil")
 	assert(duration, "Argument 2 (duration) missing or nil")
 
@@ -566,7 +588,7 @@ function module:Create(points:Instance|{[number]:CFrame}, duration:number, ...)
 	self.PreviousCameraType = nil
 	self.PreviousCoreGuis = nil
 
-	local args = {...}
+	local args = { ... }
 
 	if typeof(points) == "Instance" then
 		assert(typeof(points) ~= "table", "Argument 1 (points) not an instance or table")
@@ -593,27 +615,25 @@ function module:Create(points:Instance|{[number]:CFrame}, duration:number, ...)
 			elseif v.EnumType == Enum.EasingStyle then
 				style = v.Name
 			end
-		end	
+		end
 	end
 	if style then
-		assert(easingFunctions[dir..style], "EasingFunction "..dir..style.." not found")
-		self.EasingFunction = dir..style
+		assert(easingFunctions[dir .. style], "EasingFunction " .. dir .. style .. " not found")
+		self.EasingFunction = dir .. style
 	end
 
-	self.SpecialFunctions = {{},{}}
+	self.SpecialFunctions = { {}, {} }
 	for i, v in ipairs(specialFunctions.StartKeys) do
 		local idx = 0
 		repeat
-			idx = table.find(args, v, idx+1)
+			idx = table.find(args, v, idx + 1)
 			if idx then --if special function is in args
 				local a = {} --arguments for s.f.
 
 				local init = idx + 1 --check for arguments for s.f
 				repeat
 					local Next = args[init]
-					local isArg = (Next or Next == false)
-						and typeof(Next) ~= "string"
-						and typeof(Next) ~= "EnumItem"
+					local isArg = (Next or Next == false) and typeof(Next) ~= "string" and typeof(Next) ~= "EnumItem"
 					if isArg then
 						table.insert(a, Next)
 						init += 1
@@ -632,16 +652,14 @@ function module:Create(points:Instance|{[number]:CFrame}, duration:number, ...)
 	for i, v in ipairs(specialFunctions.EndKeys) do
 		local idx = 0
 		repeat
-			idx = table.find(args, v, idx+1)
+			idx = table.find(args, v, idx + 1)
 			if idx then
 				local a = {}
 
 				local init = idx + 1
 				repeat
 					local Next = args[init]
-					local isArg = (Next or Next == false)
-						and typeof(Next) ~= "string"
-						and typeof(Next) ~= "EnumItem"
+					local isArg = (Next or Next == false) and typeof(Next) ~= "string" and typeof(Next) ~= "EnumItem"
 					if isArg then
 						table.insert(a, Next)
 						init += 1
@@ -665,14 +683,14 @@ local queue = {}
 queue.__index = queue
 queue.ClassName = "Queue"
 
-function queue:Play():()
+function queue:Play(): ()
 	if module.Playing == nil then
 		module.Playing = self
 		local cutscenes = self.Cutscenes
 
 		for i, v in ipairs(cutscenes) do
-			if cutscenes[i+1] then
-				v.Next = cutscenes[i+1]
+			if cutscenes[i + 1] then
+				v.Next = cutscenes[i + 1]
 			else
 				v.Next = 0 --last
 			end
@@ -680,7 +698,7 @@ function queue:Play():()
 
 		self.PreviousCoreGuis = getCoreGuisEnabled()
 		StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, false)
-		self.PreviousCameraType = camera.CameraType		
+		self.PreviousCameraType = camera.CameraType
 		self.PlaybackState = Enum.PlaybackState.Playing
 
 		module.Playing = self
@@ -691,7 +709,7 @@ function queue:Play():()
 	end
 end
 
-function queue:Pause(waitTime:number?):()
+function queue:Pause(waitTime: number?): ()
 	if module.Playing then
 		self.CurrentCutscene:Pause(waitTime)
 	else
@@ -699,16 +717,16 @@ function queue:Pause(waitTime:number?):()
 	end
 end
 
-function queue:Resume():()
+function queue:Resume(): ()
 	if module.Playing == nil then
 		module.Playing = self
 		self.CurrentCutscene:Resume()
-	else	
+	else
 		error("Error while calling Resume - A cutscene/queue was already playing")
 	end
 end
 
-function queue:Cancel():()
+function queue:Cancel(): ()
 	if module.Playing then
 		self.CurrentCutscene:Cancel()
 		self.CurrentCutscene = nil
@@ -737,7 +755,7 @@ function module:CreateQueue(...)
 	local self = {}
 	self.Completed = Signal.new()
 	self.PlaybackState = Enum.PlaybackState.Begin
-	self.Cutscenes = {...}
+	self.Cutscenes = { ... }
 
 	return setmetatable(self, queue)
 end
